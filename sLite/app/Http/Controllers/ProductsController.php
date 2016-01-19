@@ -101,7 +101,6 @@ class ProductsController extends Controller
                 $rNew[$rI['sku']]['price'] = $rI['price'];
             }
         }
-
         //Update each changed entry
         foreach ($rDiff as $rK => $rV)
         {

@@ -46,8 +46,8 @@ class HomeController extends Controller
             //If nothing changed then we continue the loop, otherwise we update each record that has changed.
             //If new item(s) are added, we will also insert those in the lookup_product table
             //$sQ = "INSERT INTO lookup_product (columns) values ($sValue) on duplicate key update title,quantity etc.. "
-            $Prod = Products::where('user_id', '=', $user_id)->get();
-            return view('products.index', ['lookup_products' => $Prod]);
+            //$Prod = Products::where('user_id', '=', $user_id)->get();
+            return view('products.index');
         }
         //$vend = new Vend();
         //$vend->get_curl();

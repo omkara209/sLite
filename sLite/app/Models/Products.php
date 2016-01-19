@@ -14,4 +14,8 @@ class Products extends Model
      */
     protected $table = 'lookup_products';
 
+    public function update_product()
+    {
+    	print_r('here');
+    }
 }
