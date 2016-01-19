@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Classes\Shopify;
 use App\Classes\Vend;
 use App\Classes\Token;
-use App\Products;
+use App\Models\Products;
 
 class HomeController extends Controller
 {
@@ -33,16 +33,21 @@ class HomeController extends Controller
         //get the store name from database when user login.
         if (Auth::check())
         {
-            $user_id = Auth::user()->id;
-            $store_name = $this->get_store_name($user_id);
+            //Assumming that StitchLite DB and Shopify/Vend were initially synced.
+            //Get all products from Shopify and Vend
+            //Remove the duplicate product from both or do on duplicate key update
+            //$shopify->insert_db_once($rAllProducts,$user_id);
 
-            $shopify = new Shopify(Token::$shopify_api_key, Token::$shopify_secret_key, $store_name);
-            $rAllProducts = $shopify->get_all_products('GET');
-
-            //Display all products and insert into DB
-            $Prod = Products::all();
-            return view('welcome', ['lookup_products' => $Prod]);
-            //$shopify->insert_db($rAllProducts,$user_id);
+            //Do a query to get all the information back from lookup_product
+            // $sQ = SELECT * FROM lookup_product where user_id = $user_id
+            //Everytime when user log in or trigger an event (press a button), We do a GET request to Shopify/Vend
+            
+            //Once we have StitchLite data and new data from Shopify/Vend, we do a compare for each row.
+            //If nothing changed then we continue the loop, otherwise we update each record that has changed.
+            //If new item(s) are added, we will also insert those in the lookup_product table
+            //$sQ = "INSERT INTO lookup_product (columns) values ($sValue) on duplicate key update title,quantity etc.. "
+            $Prod = Products::where('user_id', '=', $user_id)->get();
+            return view('products.index', ['lookup_products' => $Prod]);
         }
         //$vend = new Vend();
         //$vend->get_curl();
@@ -55,11 +60,4 @@ class HomeController extends Controller
         $vend->get_vend_access($_GET['code']);
     }
 
-
-    public function get_store_name($user_id)
-    {
-        $data = DB::table('lookup_store')->where('user_id',$user_id)->first();
-        $data = json_decode(json_encode($data), true);
-        return $data['store_name'];
-    }
 }

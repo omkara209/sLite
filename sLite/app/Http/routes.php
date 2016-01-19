@@ -36,5 +36,7 @@ Route::group(['middleware' => 'web'], function () {
 
 	Route::get('VendRequestStore',function(){
 		echo 'in vent store';
-	});        
+	}); 
+
+	Route::get('Sync','ProductsController@syncData');     
 });

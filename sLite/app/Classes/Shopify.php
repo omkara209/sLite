@@ -1,10 +1,9 @@
 <?php
 
-    // Source : https://github.com/Mochaka/laravel-shopify/blob/master/src/Mochaka/Shopify/Shopify.php
 namespace App\Classes;
 use Illuminate\Support\Facades\DB;
 
-class Shopify
+class Shopify implements BasePlatform 
 {
     //https://f807c12f4ea01c1c10981655ab41820e:2334991c5041dbcea4b059564d74642c@sukhis-store.myshopify.com/admin/products.json
 
@@ -51,7 +50,7 @@ class Shopify
         return $data;
     }
 
-    public function insert_db($rAllProducts,$user_id)
+    public function insert_db_once($rAllProducts,$user_id)
     {
         $rVariants = array();
         $sValues = "";

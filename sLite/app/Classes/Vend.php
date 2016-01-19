@@ -2,7 +2,7 @@
 
 namespace App\Classes;
 
-class Vend
+class Vend implements BasePlatform
 {
     //https://f807c12f4ea01c1c10981655ab41820e:2334991c5041dbcea4b059564d74642c@sukhis-store.myshopify.com/admin/products.json
 
@@ -62,6 +62,11 @@ class Vend
 			var_dump($response);
 
     	}
+    }
+
+    public function get_all_products()
+    {
+
     }
 
 }
