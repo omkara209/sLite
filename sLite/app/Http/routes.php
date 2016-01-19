@@ -30,6 +30,11 @@ Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
     Route::get('home', 'HomeController@index');
+    Route::get('products','ProductsController@index');
 
     Route::get('VendRequest','HomeController@vend');
+
+	Route::get('VendRequestStore',function(){
+		echo 'in vent store';
+	});        
 });

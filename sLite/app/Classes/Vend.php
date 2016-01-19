@@ -1,6 +1,5 @@
 <?php
 
-    // Source : https://github.com/Mochaka/laravel-shopify/blob/master/src/Mochaka/Shopify/Shopify.php
 namespace App\Classes;
 
 class Vend
@@ -14,29 +13,27 @@ class Vend
 
     public function get_curl()
     {
-    	$url = "https://secure.vendhq.com/connect?response_type=code&client_id=nyZV30AraVV7eMBrtTp38fA42lJ0oYHN&redirect_uri=http://localhost:8000/VendRequest&state=1";
+    	$url = "https://secure.vendhq.com/connect?response_type=code&client_id=nyZV30AraVV7eMBrtTp38fA42lJ0oYHN&redirect_uri=http://localhost:8000/VendRequest";
 
     	 // create curl resource 
-        $ch = curl_init($url); 
-
+        $ch = curl_init(); 
         // set url 
         $options = array(
             CURLOPT_CUSTOMREQUEST   => 'GET',
             CURLOPT_RETURNTRANSFER  => true,
-            CURLOPT_SSL_VERIFYPEER  => true,
-            CURLOPT_HTTPHEADER      => array('Content-type: application/json'),
+            CURLOPT_SSL_VERIFYPEER  => false,
+            CURLOPT_HTTPHEADER => array('Content-type: application/text')
         );
 
-        curl_setopt_array($ch, $options); 
+        curl_setopt_array($ch, $options);
 
         // $output contains the output string 
         $output = curl_exec($ch); 
-        //var_dump($output);
+        var_dump($output);
     }
 
     public function get_vend_access($code)
     {
-    	trim($code);
     	if ($code) 
     	{
 
@@ -48,11 +45,11 @@ class Vend
 		            'client_id' => $api_key,
 		            'client_secret' => $secret_key,
 		            'grant_type' => 'authorization_code',
-		            'redirect_uri' => "http://localhost/8000/VendRequest2"
+		            'redirect_uri' => "http://localhost/8000/VendRequestStore"
 		    	);
 
 		     // Prepare a request to POST to vend
-		    $url = "https://sukhisstore.vendhq.com/api/1.0/token";
+		    $url = "https://joshstore.vendhq.com/api/1.0/token";
 
 		    $ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
@@ -63,28 +60,8 @@ class Vend
             curl_setopt($ch, CURLOPT_HTTPHEADER,array('Content-type: application/x-www-form-urlencoded'));
 			$response = curl_exec($ch);
 			var_dump($response);
-			die();
 
-		    $options = [
-		        'http' => [
-		        	'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-		            'method' => 'POST',
-		            'content' => http_build_query($data)
-		        ]
-		    ];
-
-		    $context = stream_context_create($options);
-			
-			$result = file_get_contents($url, false, $context);
-			var_dump($result);
-		    $result=json_decode($result);
     	}
-    	else 
-    	{
-		    // If the variable 'code' is NOT present in the URI then provide a link to receive its value
-			echo('<a href ="https://{your-vend-subdomain}.vendhq.com/connect?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}">Request Access</a>');
-		    echo('<br/>');
-		}
     }
 
 }

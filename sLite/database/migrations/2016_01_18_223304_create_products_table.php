@@ -21,6 +21,8 @@ class CreateProductsTable extends Migration
             $table->integer('quantity');
             $table->float('price');
             $table->integer('user_id');
+            $table->unique( array('user_id','sku'));
+
             $table->timestamps();
         });
     }

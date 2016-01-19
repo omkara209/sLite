@@ -2,6 +2,7 @@
 
     // Source : https://github.com/Mochaka/laravel-shopify/blob/master/src/Mochaka/Shopify/Shopify.php
 namespace App\Classes;
+use Illuminate\Support\Facades\DB;
 
 class Shopify
 {
@@ -50,6 +51,35 @@ class Shopify
         return $data;
     }
 
+    public function insert_db($rAllProducts,$user_id)
+    {
+        $rVariants = array();
+        $sValues = "";
+        $rInsert = array();
+
+        foreach ($rAllProducts as $rP)
+        {
+            foreach ($rP as $rPP)
+            {
+                $rVariants[] = $rPP['variants'];
+            }
+        }
+
+        foreach ($rVariants as $rV)
+        {
+            foreach ($rV as $rVV)
+            {
+                $rInsert[] = array('sku' => $rVV['sku'],'product_name' => $rVV['title'],
+                            'quantity' =>$rVV['inventory_quantity'],'price' =>$rVV['price'], 'user_id' => $user_id);
+                $sValues .= "'{$rVV['sku']}', '{$rVV['title']}',{$rVV['inventory_quantity']},{$rVV['price']},$user_id,";
+            }
+        }
+        $sValues = substr($sValues,0,-1);
+        //echo $sValues;
+        print_r($rInsert);
+
+        DB::table('lookup_products')->insert($rInsert);
+    }   
 }
 
 ?>
